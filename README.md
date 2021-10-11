@@ -37,7 +37,7 @@ source python3-venv/bin/activate
 Download and install this repo
 
 ```
-git clone https://github.com/DendrouLab/sc_pipelines
+git clone git@github.com:/DendrouLab/sc_pipelines
 cd sc_pipelines
 pip install --upgrade pip
 pip install -r requirements.txt # installs required python packages
