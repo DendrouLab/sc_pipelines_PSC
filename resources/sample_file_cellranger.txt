@@ -1,0 +1,3 @@
+sample_id	raw_path	filtered_path	library_id	patient	tissue	channel
+FNA27_PBMC_A	/well/singlecell/P180331/10X-gex-grouped/DEN5936A5/outs/raw_feature_bc_matrix	/well/singlecell/P180331/10X-gex-grouped/DEN5936A5/outs/filtered_feature_bc_matrix	DEN5936A5 	FNA27	PBMC	A
+FNA27_PBMC_B	/well/singlecell/P180331/10X-gex-grouped/DEN5936A6/outs/raw_feature_bc_matrix	/well/singlecell/P180331/10X-gex-grouped/DEN5936A6/outs/filtered_feature_bc_matrix	DEN5936A6	FNA27	PBMC	B

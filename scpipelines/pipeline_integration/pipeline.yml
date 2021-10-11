@@ -1,0 +1,136 @@
+# Pipeline pipeline_integration.py configuration file
+# ==============================================
+
+# compute resource options
+# ------------------------
+resources:
+  # Number of threads used for parallel jobs
+  threads_high: 4
+  # high for find neighbours, find clusters, find amrekrs
+  threads_medium: 2
+  # nothing uses this atm.
+  threads_low: 1
+
+
+# Start
+# --------------------------
+# either one that exists already with
+#tenx_dir:
+#create_anndata: False
+sample_prefix: taurus_test
+unfiltered_obj: ../run_qc/taurus_unfilt.h5ad
+
+# if running this on prefiltered datat then
+#1. set unfiltered obj (above) to blank
+#2. rename your filtered file to match, the format PARAMS['sample_prefix'] + '_filt.h5ad'
+#3. put renamed file in the same folder as this yml.
+
+
+# Filtering
+# --------------------------
+filtering:
+  run: True
+  min_genes:
+  min_cells:
+  max_counts:
+  max_genes:
+  # percent filtering: 
+  # this should be a value between 0 and 100%. 
+  # leave blank or set to 100 to avoid filtering for any of these param
+  percent_mito:
+  percent_ribo:
+  percent_hb:
+  # name of columns for which you want to drop NAs, e.g. cells without antibody in demultiplexing data.
+  # Leave blank if not applicable
+  drop_nas_col:
+# either one score for all samples e.g. 0.25, or a csv file with two columns sample_id, and cut off
+scrublet_threshold:
+
+# what is the maximmum number of cells we want **per sample_id**,
+# leave blank for if you want to keep all cells
+downsample:
+
+# ------------
+## plotting vars
+# ------------
+plotqc:
+  # use these categorical variables to plot/split by and count the cells
+  grouping_var: sample_id,tissue,patient,channel
+  # use these continuous variables to plot gradients and distributions
+  metrics: pct_counts_mt,pct_counts_rp,pct_counts_hb,pct_counts_ig,doublet_scores
+
+
+# Normalisation
+# --------------------------
+# hvg_flavour options include "seurat", "cell_ranger", "seurat_v3", default; "seurat"
+# for dispersion based methods "seurat" and "cell_ranger", you can specify parameters: min_mean, max_mean, min_disp
+# for "seurat_v3" a different method is used, a you specify how many variavle genes to find.
+# If you specify n_top_genes, then the other paramteres are nulled.
+# details: https://scanpy.readthedocs.io/en/stable/api/scanpy.pp.highly_variable_genes.html
+hvg:
+  # there is a defaul exclusions file for immune cells in sc_pipelines/resources/exclude_genes_HLAIGTR_v1.txt
+  # examine this to see what format is expected, if you want to use this file set the parameter to "default
+  exclude: default
+  flavor: seurat_v3 # "seurat", "cell_ranger", "seurat_v3"
+  n_top_genes: 2000
+  min_mean:
+  max_mean:
+  min_disp:
+  # if you want to filter the scaled object by hvgs (essential for large datasets) then set filter to True
+  filter: False
+
+# Regression variables, what do you want to regress out, leave blank if nothing
+# I recommend not regressing out unless you have good reason to.
+regress_variables:
+
+# scale, clip values as per: https://scanpy.readthedocs.io/en/stable/api/scanpy.pp.scale.html
+# generally leave
+scale_max_value:
+
+# run pca upstream correction methods.  
+pca:
+  scree_n_pcs: 50
+  color_by: sample_id
+
+#--------------------------
+# Batch correction
+# -------------------------
+
+bc:
+  # True or false depending on whether you want to run batch correction
+  run: True 
+  # what method(s) to use to run batch correction, you can specify multiple 
+  # the pipeline does not currently support combat!
+  tools: harmony,bbknn,scanorama
+  # this is the column you want to batch correct on. if you specify a comma separated list, 
+  # they will be all used simultaneosly. if you want to test correction for one at a time, 
+  # specify one at a time and run the pipeline in different folders i.e. integration_by_sample, 
+  # integration_by_tissue ...
+  column: sample_id 
+  # number of Principal Components to calculate:
+  #   -if no correction is applied, PCA will be calculated and used to run UMAP and clustering on
+  #   -if Harmony is the method of choice, it will use these components to create a corrected dim red.)
+  # set the same as scree_n_pcs
+  npcs: 50
+
+  # umap params
+  #-----------------------------
+  # number of neighbors to use when calculating the graph for clustering and umap. 
+  neighbors: 40 
+  
+  # extra parameters for Harmony
+  #-----------------------------
+  # sigma value, used by Harmony
+  sigma: 0.1
+  # plot convergence for Harmony?
+  plotconvergence: True
+
+
+## Final choices: Leave blank until you have reviewed the results from running
+# sc_pipelines integration make full
+# choose the parameters to integrate into the final anndata object
+# then run
+# sc_pipelines integration make merge_batch_correction
+  choice: harmony
+
+

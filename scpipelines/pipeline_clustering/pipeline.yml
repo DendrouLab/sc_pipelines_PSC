@@ -1,0 +1,78 @@
+# Pipeline pipeline_clustering_scanpy.py configuration file
+# ==============================================
+
+# compute resource options
+# ------------------------
+resources:
+  # Number of threads used for parallel jobs
+  threads_high: 4
+  # high for find neighbours, find clusters, find amrekrs
+  threads_medium: 2
+  # nothing uses this atm.
+  threads_low: 2
+  # plotting mostly
+  fewer_jobs: True
+
+# Start
+# --------------------------
+# either one that exists already with
+sample_prefix: anndata
+full_obj: anndata_logn.h5ad
+scaled_obj: anndata_scaled.h5ad
+
+
+batch_correction: harmony  # None, harmony, scanorama, bbknn or combat
+
+
+# ---------------------------------------
+# parameters for find neighbours
+# ---------------------------------------
+neighbors:
+  n: 15,30
+  pcs: 2,50 # how many PCs to use as input?
+  metric: euclidean # options: euclidean, cosine
+
+# ---------------------------------------
+# parameters for umap calculation
+# ---------------------------------------
+umap:
+  mindist: 0.1,0.3
+
+# ---------------------------------------
+# parameters for clustering
+# ---------------------------------------
+clusterspecs:
+    cluster_resolutions: 0.2,0.6,1 # comma-separated resolutions to run find_clusters on (specify at least 2)
+    algorithm: leiden # (louvain or leiden, can choose both?)
+
+# ---------------------------------------
+# parameters for finding marker genes
+# ---------------------------------------
+markerspecs:
+    mincells: 10 # if a cluster contains less than n cells then do not bother doing marker analysis
+    # Setting pseudo_seurat to True means that rather than use scanpy.rank_gene_groups to identify gene groups,
+    # a python implementation of Seurat::FindMarkers (written by CRG) is used,
+    # We recommend that pseudo_seurat is set to False
+    pseudo_seurat: False
+    # these next two settings do not matter unless pseudo_seurat is set to True,
+    # If applicable look at Seurat documentation for FindMarkers for details
+    minpct: 0.1
+    threshuse: 0.25
+
+
+
+# ---------------------------------------
+# plot specs are used to define which metadata columns are used in the visualisations
+# ---------------------------------------
+plotspecs:
+    docomplex: True # produce complex heatmaps?
+    # get metrics plots of these continuous variables per cluster
+    continuous_variables: pct_counts_mt
+    # get metrics plots plot of these discrete variables per clusters
+    discrete_variables: sample_id
+
+
+custom_markers:
+    path:
+    files:
+    minimal:

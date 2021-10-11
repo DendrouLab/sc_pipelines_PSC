@@ -1,0 +1,5 @@
+sample_id	path	filetype
+cr	/well/dendrou/users/dyd931/projects/scpipelines_test/input//CID003353-1/filtered_feature_bc_matrix	cellranger
+mat	/well/dendrou/users/dyd931/projects/scpipelines_test/input/allenlab_500cells_matrix.csv	csv_matrix
+h5ad	/well/dendrou/users/dyd931/projects/scpipelines_test/input/snRNAseq.h5ad	h5ad
+mat2	/well/dendrou/users/dyd931/projects/scpipelines_test/input/allenlab_500cells_matrix.txt	txt_matrix

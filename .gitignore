@@ -1,0 +1,7 @@
+.DS_Store
+.idea/
+sc_pipelines.egg-info/
+scpipelines/__pycache__
+*/.ipynb_checkpoints/
+.Rproj.user
+sc_pipelines.Rproj
