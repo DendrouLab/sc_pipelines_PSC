@@ -17,8 +17,6 @@ These pipelines use cgat-core pipeline software
 
 
 ## Installation:
-Recomp users find additional advice in [docs/installation_rescomp](https://github.com/DendrouLab/sc_pipelines/blob/master/docs/installation_rescomp.md)
-
 It is advisable to run everything in a virtual environment.
 
 e.g.
@@ -48,7 +46,7 @@ python setup.py develop
 The pipelines are now installed as a local python package.
 
 The pipelines use R (mostly for ggplot visualisations). The pipeline will call a local R installation (as opposed to requireing a specific build within the virtual environment)
-Install required R pacakges by copying the following code into R
+Install required R packages by copying the following code into R
 ```
 install.packages(c())
 ```
@@ -79,7 +77,7 @@ Navigate to the directory where you want to run your analysis (this should not b
 ```
 mkdir data_dir/
 cd data_dir/
-sc_pipelines clustering_scanpy config
+sc_pipelines qc_cellranger config
 ```
 
 This will produce two files, `pipeline.log` and `pipeline.yml`
@@ -88,32 +86,32 @@ Edit `pipeline.yml` as appropriate for your data.
 
 Then check which jobs will run with the command
 ```
-sc_pipelines clustering_scanpy show full
+sc_pipelines qc_cellranger show full
 ```
 The output of this will show a list of tasks that will be run as part of the pipeline.
 
 To run use the command
 ```
-sc_pipelines clustering_scanpy make full
+sc_pipelines qc_cellranger make full
 ```
 or
 to run it in the background, and prevent the jobs from hanging up when you log off the server
 ```
-nohup sc_pipelines clustering_scanpy make full &
+nohup sc_pipelines qc_cellranger make full &
 ```
 
 Occasionally you might want to run tasks individually (e.g. to debug)
 In order to do this you can run any task in the `show full` list such as:
 ```
 
-sc_pipelines clustering_scanpy make find_markers
+sc_pipelines clustering make find_markers
 ```
 
 ## Running the complete pipeline
 
 Run each of pipeline qc, integration and clustering in separate folders.
 
-1. Run `sc_pipelines qc make full `
+1. Run `sc_pipelines qc_cellranger make full `
 2. Use outputs to decide filtering thresholds. Note that the actual filtering occurs in the first step of integration pipeline
 3. Run `sc_pipelines integration make full`
 4. Use outputs to decide on the best batch correction method
@@ -124,10 +122,7 @@ Run each of pipeline qc, integration and clustering in separate folders.
 ## Inputs to QC pipeline
 There are two qc pipelines
 - qc_cellranger
-- qc_general 
 
-They both operate on the principle of listing all your samples and metadata into one input file (2 if including demultiplexing info)
-But the columns required are different
 
 For qc_cellranger the minimum required columns are 
 
@@ -135,15 +130,6 @@ sample_id  |     raw_path   |     filtered_path
 ---|---|---
 Example at resources/sample_file_cellranger.txt
 
-For qc_general the minimum required columns are
-
-sample_id   |    path    |    type  
----|---|---
-
-Example at resources/sample_file_general.txt
-
-where type is one of cellranger, h5ad, csv_matrix or txt_matrix. If giving a cellranger path, give the path to the filtered_dircetory containing t he matrix, genes and features.
- Otherwise path should be the complete path to the file
 
 #### demultiplexing data
 If you have demultiplexing data you can should include two extra columns in your samples 
